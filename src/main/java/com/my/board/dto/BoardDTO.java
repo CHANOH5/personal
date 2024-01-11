@@ -23,9 +23,9 @@ public class BoardDTO {
 	
 	private String content;
 	
-	private String member;
+	private String memberId;
 
 	@JsonFormat(pattern="yy/MM/dd", timezone="Asia/Seoul")
-	private Date regdate;
+	private Date regDate;
 
 } // end class

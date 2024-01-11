@@ -49,9 +49,9 @@ public class BoardEntity {
 	private String content;		// 게시글 내용
 	
 	@Column
-	private String member;	// 작성자
+	private String memberId;	// 작성자
 	
 	@Column
-	private Date regdate;	// 작성일
+	private Date regDate;	// 작성일
 	
 } // end class
