@@ -14,22 +14,80 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <BoardItem></BoardItem>
-                    <!-- <AttendanceItem :a="a" v-if="attendanceList" v-for="a in attendanceList.content" :key="a.id" /> -->
+                    <BoardItem v-if="boardList" v-for="b in boardList.content" :key="b.id" :b="b"/>
                 </tbody>
             </table>
         </div>
         <br />
-        <div>페이징 처리 부분</div>
+        <PageGroup v-if="boardList" :path="'/board/'"
+            :currentPage="$route.params.currentPage ? $route.params.currentPage : 1" :startPage="startPage"
+            :endPage="endPage" :totalPage="boardList.totalPages" />
     </main>
 
 </template>
 <script>
 
 import BoardItem from "./BoardItem.vue";
+import PageGroup from "@/components/PageGroup.vue";
+import axios from "axios";
 
 export default {
+    name: "BoardList",
+    components: { BoardItem, PageGroup },
+    data() {
+        return {
+            currentPage: 1,
+            boardList: null,
+            startPage: 1,
+            endPage: 1,
+        }
+    },
+    methods: {
 
+        axiosHandler() {
+            const url = `${this.backURL}/board/list`;
+            axios
+                .get(url)
+                .then((response) => {
+
+                    console.log(response.data);
+                    this.boardList = response.data;
+
+                    // this.boardList.id.sort((a, b) => {
+                    //     return  b.id - a.id;
+                    // })
+
+                    if (this.currentPage <= this.boardList.totalPages) {
+                        this.startPage = parseInt((this.currentPage - 1) / 5) * 5 + 1;
+                        this.endPage = this.startPage + 5 - 1;
+
+                        if (this.endPage > this.boardList.totalPages) {
+                            this.endPage = this.boardList.totalPages;
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error occurred:", error);
+                });
+        },
+
+    },
+    watch: {
+        
+        // --- 라우터값이 변경되었을 때 할 일 START ---
+        // $route(newRoute, oldRoute) {
+        //     console.log("라우터값이 변경" + newRoute.path + "," + oldRoute.path);
+        //     if (newRoute.params.currentPage) {
+        //         this.currentPage = newRoute.params.currentPage;
+        //     } else {
+        //         this.currentPage = 1;
+        //     }
+        // },
+        // --- 라우터값이 변경되었을 때 할 일 END ---
+    },
+    created() {
+        this.axiosHandler();
+    }
 }
 </script>
 <style scoped>

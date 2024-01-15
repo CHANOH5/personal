@@ -1,12 +1,15 @@
 
 <template>
-    <Board/>
+
+	<BoardList/>
 </template>
 
-<script setup>
-  import Board from "./pages/Board/BoardList.vue"
+<script>
+import BoardList from "./pages/Board/BoardList.vue";
+
+export default {
+	components: { BoardList },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
